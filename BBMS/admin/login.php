@@ -1,0 +1,140 @@
+<?php
+    require_once("../includes/session.inc.php");
+    require_once("../includes/template.php");
+
+    if(isset($_SESSION["admin"]) && isset($_GET["login"]) && $_GET["login"]==="success") {
+        header("Location:dashboard.php");
+    }
+
+    function check_errors() {
+        if(isset($_SESSION["admin_error_login"])) {
+            $errors = $_SESSION["admin_error_login"];
+            echo "<br>";
+            foreach ($errors as $error) {
+                echo '<div class="alert alert-danger alert-dismissible fade show text-center mx-auto" role="alert" style="width: fit-content;">';
+                echo $error;
+                echo '<button type="button" class="close" data-dismiss="alert" aria-label="Close" style="background:none;">
+                <span aria-hidden="true">&times;</span>
+                </button>
+                </div>';
+            }
+            unset($_SESSION["admin_error_login"]);
+        }
+    }
+?>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Login</title>
+    <!-- Include Bootstrap CSS CDN -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="../images/blood-drop.svg" type="image/x-icon">
+    <!-- Apply custom styles for the form -->
+    <style>
+        html, body {
+            min-height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+
+        .form-container {
+            border-radius: 10px;
+            padding: 20px;
+            margin: 10px auto 50px;
+            max-width: 400px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .active, .active:hover {
+            background-color: #1abc9c; /* Highlight color for the active button */
+            color:#fff;
+        }
+
+        .btn {
+            border: 1px #1ac9bc solid;
+            margin: 5px;
+        }
+
+        .custom-text-center {
+            padding: 10px;
+            max-width: 400px;
+            margin: auto;
+        }
+
+        @media (min-width: 576px) {
+            .text-center {
+                display: flex;
+                justify-content: center;
+            }
+            .btn {
+                flex: 1;
+            }
+        }
+
+        /* Light and Dark mode styles */
+        body.light-mode {
+            background-color: #ffffff;
+        }
+
+        body.dark-mode {
+            background-color: #121212;
+            color: white;
+        }
+
+        nav.navbar.light-mode {
+            background-color: #660000; /* Blood red for light mode */
+        }
+
+        nav.navbar.dark-mode {
+            background-color: #333; /* Black for dark mode */
+        }
+    </style>
+</head>
+<body class="light-mode">
+    <div class="container" style="margin-top:80px;">
+        <nav class="navbar navbar-expand-lg navbar-light fixed-top light-mode">
+            <a class="navbar-brand" href="../index.php" style="color: #fff;font-size:22px;letter-spacing:2px;">BBMS</a>
+        </nav>
+
+        <?php 
+            check_errors();
+        ?>
+
+        <!-- Button to toggle Dark Mode -->
+        <button onclick="toggleDarkMode()" class="btn btn-secondary">Toggle Dark Mode</button>
+
+        <div class="text-center custom-text-center">
+            <a class="btn" href="../patient/login.php">As Patient</a>
+            <a class="btn" href="../donor/login.php">As Donor</a>
+            <a class="btn active" href="../admin/login.php">As Admin</a>
+        </div>
+
+        <!-- Admin Login Form -->
+        <div style="display:block;">
+            <?php login_template("Admin Login"); ?>
+        </div>
+    </div>
+
+    <!-- Include Bootstrap JS and jQuery CDN -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <script>
+        // Function to toggle Dark Mode
+        function toggleDarkMode() {
+            document.body.classList.toggle('dark-mode');
+            document.body.classList.toggle('light-mode');
+            let navbar = document.querySelector('nav.navbar');
+            navbar.classList.toggle('dark-mode');
+            navbar.classList.toggle('light-mode');
+        }
+    </script>
+</body>
+</html>
